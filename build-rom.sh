@@ -38,15 +38,15 @@ LOGDIR=$( dirname ${SOURCE_DIR} )/build-logs
 #CLEAN= <---- If not clean insert clean here
 #LOG= <---- if not making log insert log here
 OUTDIR=${SOURCE_DIR}/out/target/product/${DEVICE}
-ZIPFORMAT=DU_${DEVICE}_*.zip
-MD5FORMAT=DU_${DEVICE}_*.zip.md5sum
-NEW_ZIP=DU-Unoffical-OMS-`date +"%m-%d"`.zip
-NEW_MD5=DU-Unoffical-OMS-`date +"%m-%d"`.zip.md5sum
+ZIPFORMAT=
+MD5FORMAT=
+NEW_ZIP=
+NEW_MD5=
 NINJA=false
-BUILD_USER=Skye
-BUILD_HOST=Unofficial
+BUILD_USER=
+BUILD_HOST=
 BUILD_TYPE=
-ROM_NICK=DU
+ROM_NICK=
 
 
 # Functions
