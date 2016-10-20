@@ -15,7 +15,7 @@ ANYKERNEL_DIR=
 # e.g. TOOLCHAIN_DIR=/home/build/FKernel/aarch64-linux-android-6.1-linaro
 TOOLCHAIN_DIR=
 # UPDATE: Script to update and clean directories
-# e.g. UPDATE=update-kernel.sh Totally optional but completly recommended
+# e.g. UPDATE=bash update-kernel.sh Totally optional but completly recommended
 UPDATE=
 # DEVICE: The device you want to compile for
 # e.g. DEVICE=angler
@@ -82,7 +82,7 @@ DATE_START=$(date +"%s")
 echoText "CLEANING UP AND UPDATING"; newLine
 
 # Clean and update directories
-bash ${UPDATE}
+${UPDATE}
 
 # Clean make
 make clean
