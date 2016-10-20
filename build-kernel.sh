@@ -23,6 +23,12 @@ DEVICE=
 # DEFCONFIG: The config file for your kernel usually kernelname_defconfig 
 # e.g. DEFCONFIG="flash_defconfig"
 DEFCONFIG=
+#EXPORT: Should the zip be automatically moved to a new directory to buvkup the file? leave blank if no yes=yes
+# e.g. EXPORT=yes
+EXPORT=yes
+#EXPORT_DIR: The directory to export to. leave blank if you dont want to export it.
+# e.g. EXPORT_DIR=/home/build/FKernelBackups
+EXPORT_DIR=/home/build/FKernelBackups
 # FUNCTIONS
 
 # Prints a formatted header; used for outlining what the script is doing to the user
@@ -123,6 +129,18 @@ else
    BUILD_RESULT_STRING="BUILD FAILED"
 fi
 
+NOW=$(date +"%m-%d")
+ZIP_LOCATION=${ANYKERNEL_DIR}/${ZIP_NAME}.zip
+ZIP_EXPORT=${EXPORT_DIR}/${NOW}
+ZIP_EXPORT_LOCATION=${EXPORT_DIR}/${NOW}/${ZIP_NAME}.zip
+
+if [[ "${EXPORT}" == "yes" ]]; then
+	newLine; echoTEXT "EXPORTING"; newLine
+	
+	rm -rf ${ZIP_EXPORT}
+	mkdir ${ZIP_EXPORT}
+	cp ${ZIP_LOCATION} ${ZIP_EXPORT}
+fi
 
 # Go home
 cd ${HOME}
@@ -136,7 +154,12 @@ DIFF=$((${DATE_END} - ${DATE_START}))
 
 echo -e ${RED}"SCRIPT DURATION: $((${DIFF} / 60)) MINUTES AND $((${DIFF} % 60)) SECONDS"
 if [[ "${BUILD_RESULT_STRING}" == "BUILD SUCCESSFUL" ]]; then
-   echo -e "ZIP LOCATION: ${ANYKERNEL_DIR}/${ZIP_NAME}.zip"
-   echo -e "SIZE: $( du -h ${ANYKERNEL_DIR}/${ZIP_NAME}.zip | awk '{print $1}' )"
+	if [[ "${EXPORT}" == "yes" ]]; then
+		echo -e "ZIP LOCATION: ${ZIP_EXPORT_LOCATION}"
+		echo -e "SIZE: $( du -h ${ZIP_EXPORT_LOCATION} | awk '{print $1}' )"
+	else
+   		echo -e "ZIP LOCATION: ${ZIP_LOCATION}"
+   		echo -e "SIZE: $( du -h ${ZIP_LOCATION} | awk '{print $1}' )"
+	fi
 fi
 echo -e ${RESTORE}
