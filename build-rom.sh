@@ -20,6 +20,7 @@
 ##CLEAN=clean <---- Remove hashtag explained below
 ##LOG=log <---- Remove hashtag explained below
 #OUTDIR=${SOURCE_DIR}/out/target/product/${DEVICE} <---- Nothing to change here don't change it
+#EXPORT=yes <---- Do you want file to be exported to dest_dir?
 #ZIPFORMAT=DU_${DEVICE}_*.zip <---- Stock zipformat usally (Rom abriviation)_(Devive name)_(date/time).zip the * sums up date/time so dont change the star 
 #MD5FORMAT=DU_${DEVICE}_*.zip.md5sum <---- Stock md5sum usally (Rom abriviation)_(Devive name)_(date/time).zip.md5sum the * sums up date/time so dont change the star 
 #NEW_ZIP=DU-Unoffical-OMS-`date +"%m-%d"`.zip <---- What you want the zip to be named in Dest Dir
@@ -38,6 +39,7 @@ LOGDIR=$( dirname ${SOURCE_DIR} )/build-logs
 #CLEAN= <---- If not clean insert clean here
 #LOG= <---- if not making log insert log here
 OUTDIR=${SOURCE_DIR}/out/target/product/${DEVICE}
+EXPORT=no
 ZIPFORMAT=
 MD5FORMAT=
 NEW_ZIP=
@@ -144,6 +146,15 @@ rm -rf ${NOW}
 mkdir ${NOW}
 cp ${OUTDIR}/${ZIPFORMAT} ${DEST_DIR}/${NOW}/${NEW_ZIP}
 cp ${OUTDIR}/${MD5FORMAT} ${DEST_DIR}/${NOW}/${NEW_MD5}
+
+if [[ "${EXPORT}" == "yes" ]]; then
+	echoText "MOVING FILES"; newLine
+	cd ${DEST_DIR}
+	rm -rf ${NOW}
+	mkdir ${NOW}
+	cp ${OUTDIR}/${ZIPFORMAT} ${DEST_DIR}/${NOW}/${NEW_ZIP}
+	cp ${OUTDIR}/${MD5FORMAT} ${DEST_DIR}/${NOW}/${NEW_MD5}
+fi
 
 # Delete the JACK server located in /home/<USER>/.jack*
 rm -rf ~/.jack*
