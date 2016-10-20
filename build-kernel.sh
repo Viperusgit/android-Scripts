@@ -79,12 +79,17 @@ DATE_START=$(date +"%s")
 
 
 # Clean previous build and update repos
-echoText "CLEANING UP AND UPDATING"; newLine
+if [[ "${UPDATE}" == "" ]]; then
+	echoText "UPDATE SETTING DISABLED"; newLine
+else
+	echoText "UPDATING"; newLine
+fi
 
 # Clean and update directories
 ${UPDATE}
 
 # Clean make
+echoText "CLEANING"; newLine
 make clean
 make mrproper
 
