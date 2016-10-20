@@ -12,20 +12,21 @@
 #Log=Makes log
 
 #Examples
-#SOURCE_DIR=/home/build/du <---Rom Source Dir
-#DEST_DIR=/home/build/DUBuildBackups <--- Place where you want rom saved
-#LOGDIR=$( dirname ${SOURCE_DIR} )/build-logs <---Nothing to change here don't change it
+#SOURCE_DIR=/home/build/du <---- Rom Source Dir
+#DEST_DIR=/home/build/DUBuildBackups <---- Place where you want rom saved
+#LOGDIR=$( dirname ${SOURCE_DIR} )/build-logs <---- Nothing to change here don't change it
 ##DEVICE=angler <---- Remove hashtag explained below
 ##SYNC=sync <---- Remove hashtag explained below
 ##CLEAN=clean <---- Remove hashtag explained below
 ##LOG=log <---- Remove hashtag explained below
-#OUTDIR=${SOURCE_DIR}/out/target/product/${DEVICE}
-#ZIPFORMAT=DU_${DEVICE}_*.zip <--- Stock zipformat usally (Rom abriviation)_(Devive name)_(date/time).zip the * sums up date/time so dont change the star 
-#MD5FORMAT=DU_${DEVICE}_*.zip.md5sum <--- Stock md5sum usally (Rom abriviation)_(Devive name)_(date/time).zip.md5sum the * sums up date/time so dont change the star 
+#OUTDIR=${SOURCE_DIR}/out/target/product/${DEVICE} <---- Nothing to change here don't change it
+#EXPORT=yes <---- Do you want file to be exported to dest_dir?
+#ZIPFORMAT=DU_${DEVICE}_*.zip <---- Stock zipformat usally (Rom abriviation)_(Devive name)_(date/time).zip the * sums up date/time so dont change the star 
+#MD5FORMAT=DU_${DEVICE}_*.zip.md5sum <---- Stock md5sum usally (Rom abriviation)_(Devive name)_(date/time).zip.md5sum the * sums up date/time so dont change the star 
 #NEW_ZIP=DU-Unoffical-OMS-`date +"%m-%d"`.zip <---- What you want the zip to be named in Dest Dir
 #NEW_MD5=DU-Unoffical-OMS-`date +"%m-%d"`.zip.md5sum <---- what you want the md5sum to be named in Dest Dir
 #NINJA=false <---- use ninja? off by default as it causes more issues
-#BUILD_USER=Skye <----- For custom user@host in kernel leave blank if you prefer stock
+#BUILD_USER=Skye <---- For custom user@host in kernel leave blank if you prefer stock
 #BUILD_HOST=Unofficial <---- For custom user@host in kernel leave blank ifyou prefer stock
 #BUILD_TYPE= <---- For custom rom version leave blank for stock
 #ROM_NICK=DU <---- Two letters to represent rom
@@ -40,6 +41,7 @@ LOGDIR=$( dirname ${SOURCE_DIR} )/build-logs
 OUTDIR=${SOURCE_DIR}/out/target/product/${DEVICE}
 ZIPFORMAT=DU_${DEVICE}_*.zip
 MD5FORMAT=DU_${DEVICE}_*.zip.md5sum
+EXPORT=yes
 NEW_ZIP=DU-Unoffical-OMS-`date +"%m-%d"`.zip
 NEW_MD5=DU-Unoffical-OMS-`date +"%m-%d"`.zip.md5sum
 NINJA=false
@@ -136,17 +138,19 @@ echoText "MAKING ZIP FILE"; newLine
 NOW=$(date +"%m-%d")
 if [[ "${LOG}" == "log" ]]; then
    rm ${LOGDIR}/*${DEVICE}*.log
-   time mka bacon 2>&1 | tee ${LOGDIR}/du_${DEVICE}-${NOW}.log
+   time mka bacon 2>&1 | tee ${LOGDIR}/${ROM_NICK}_${DEVICE}-${NOW}.log
 else
    time mka bacon
 fi
-   
-echoText "MOVING FILES"; newLine
-cd ${DEST_DIR}
-rm -rf ${NOW}
-mkdir ${NOW}
-cp ${OUTDIR}/${ZIPFORMAT} ${DEST_DIR}/${NOW}/${NEW_ZIP}
-cp ${OUTDIR}/${MD5FORMAT} ${DEST_DIR}/${NOW}/${NEW_MD5}
+
+if [[ "${EXPORT}" == "yes" ]]; then
+	echoText "MOVING FILES"; newLine
+	cd ${DEST_DIR}
+	rm -rf ${NOW}
+	mkdir ${NOW}
+	cp ${OUTDIR}/${ZIPFORMAT} ${DEST_DIR}/${NOW}/${NEW_ZIP}
+	cp ${OUTDIR}/${MD5FORMAT} ${DEST_DIR}/${NOW}/${NEW_MD5}
+fi
 
 # Delete the JACK server located in /home/<USER>/.jack*
 rm -rf ~/.jack*
@@ -163,4 +167,3 @@ echo -e "${BUILD_RESULT_STRING}!\n"
 echo -e "TIME: $(echo $((${END}-${START})) | awk '{print int($1/60)" MINUTES AND "int($1%60)" SECONDS"}')"
 echo -e "-------------------------------------"
 echo -e ${RST}; newLine
-
