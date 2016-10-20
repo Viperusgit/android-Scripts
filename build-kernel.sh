@@ -78,17 +78,17 @@ echoText "BUILD SCRIPT STARTING AT $(date +%D\ %r)"
 DATE_START=$(date +"%s")
 
 
-# Clean previous build and update repos
+# Determines if update is enabled
 if [[ "${UPDATE}" == "" ]]; then
 	echoText "UPDATE SETTING DISABLED"; newLine
 else
 	echoText "UPDATING"; newLine
 fi
 
-# Clean and update directories
+# Runs update commands
 ${UPDATE}
 
-# Clean make
+# Cleans
 echoText "CLEANING"; newLine
 make clean
 make mrproper
