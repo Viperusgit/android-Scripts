@@ -15,7 +15,7 @@ ANYKERNEL_DIR=
 # e.g. TOOLCHAIN_DIR=/home/build/FKernel/aarch64-linux-android-6.1-linaro
 TOOLCHAIN_DIR=
 # UPDATE: Script to update and clean directories
-# e.g. UPDATE=bash update-kernel.sh Totally optional but completly recommended
+# e.g. UPDATE=update-kernel.sh Totally optional but completly recommended
 UPDATE=
 # DEVICE: The device you want to compile for
 # e.g. DEVICE=angler
@@ -28,7 +28,7 @@ DEFCONFIG=
 EXPORT=yes
 #EXPORT_DIR: The directory to export to. leave blank if you dont want to export it.
 # e.g. EXPORT_DIR=/home/build/FKernelBackups
-EXPORT_DIR=/home/build/FKernelBackups
+EXPORT_DIR=
 # FUNCTIONS
 
 # Prints a formatted header; used for outlining what the script is doing to the user
@@ -89,10 +89,8 @@ if [[ "${UPDATE}" == "" ]]; then
 	echoText "UPDATE SETTING DISABLED"; newLine
 else
 	echoText "UPDATING"; newLine
+	bash ${UPDATE}
 fi
-
-# Runs update commands
-${UPDATE}
 
 # Cleans
 echoText "CLEANING"; newLine
