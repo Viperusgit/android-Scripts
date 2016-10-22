@@ -15,8 +15,8 @@ ANYKERNEL_DIR=/home/build/FKernel/AnyKernel2
 # e.g. TOOLCHAIN_DIR=/home/build/FKernel/aarch64-linux-android-6.1-linaro
 TOOLCHAIN_DIR=/home/build/FKernel/aarch64-linux-android-6.1-linaro
 # UPDATE: Script to update and clean directories
-# e.g. UPDATE=bash update-kernel.sh Totally optional but completly recommended
-UPDATE=
+# e.g. UPDATE=update-kernel.sh Totally optional but completly recommended
+UPDATE=update.sh
 # DEVICE: The device you want to compile for
 # e.g. DEVICE=angler
 DEVICE=angler
@@ -96,11 +96,10 @@ if [[ "${UPDATE}" == "" ]]; then
 	echoText "UPDATE SETTING DISABLED"; newLine
 else
 	echoText "UPDATING"; newLine
+	bash ${UPDATE}
 fi
 
 
-# Clean and update directories
-${UPDATE}
 
 # Clean make
 echoText "CLEANING"; newLine
