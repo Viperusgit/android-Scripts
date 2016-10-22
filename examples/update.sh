@@ -3,20 +3,30 @@
 #Edit These Appropriately
 
 #Examples
-#ANYKERNEL_DIR=/home/build/FKernel/AnyKernel2 <---Points to AnyKernelDir
-#SOURCE_DIR=/home/build/FKernel/angler  <--- Points to Kernel Source Dir
-#SCRIPTS_DIR=/home/build/FKernel/Scripts <--- Points to Scripts Dir
-#ANYKERNEL_BRANCH=angler-flash-personal <--- Branch of AnyKernel chosen to run
-#KERNEL_BRANCH=staging <--- Branch of Kernel chosen to compile
-#SCRIPT=build-kernel.sh <--- Script to build Kernel
+#ANYKERNEL_DIR=/home/build/FKernel/AnyKernel2 <---- Points to AnyKernelDir
+#BACKUP=true <---- backup specific files
+#BACKUP_DIR=/home/build/FKernel/Scripts/backup <---- Backup dir (must be named backup)
+#BACKUP_FILEA=Makefile <---- first file to backup
+#BACKUP_FILEB= <---- second file to backup
+#BACKUP_FILEC= <---- third file to backup
+#SOURCE_DIR=/home/build/FKernel/angler  <---- Points to Kernel Source Dir
+#SCRIPTS_DIR=/home/build/FKernel/Scripts <---- Points to Scripts Dir
+#ANYKERNEL_BRANCH=angler-flash-personal <---- Branch of AnyKernel chosen to run
+#KERNEL_BRANCH=staging <---- Branch of Kernel chosen to compile
+#SCRIPT=build-kernel.sh <---- Script to build Kernel
 #UPDATE=update-kernel.sh <---- Current script name
-#SLEEP=1 <--- if you want it to not pause and run fast set this to 0 set to 1 by default as it looks nicerthen spamming commands in cmd fast
+#SLEEP=1 <---- if you want it to not pause and run fast set this to 0 set to 1 by default as it looks nicerthen spamming commands in cmd fast
 
 ANYKERNEL_DIR=/home/build/FKernel/AnyKernel2
+BACKUP=true
+BACKUP_DIR=/home/build/FKernel/Scripts/backup
+BACKUP_FILEA=Makefile
+BACKUP_FILEB=
+BACKUP_FILEC=
 SOURCE_DIR=/home/build/FKernel/angler
 SCRIPTS_DIR=/home/build/FKernel/Scripts/examples
 ANYKERNEL_BRANCH=angler-flash-personal
-KERNEL_BRANCH=staging
+KERNEL_BRANCH=personal
 SCRIPT=build-flash.sh
 UPDATE=update.sh
 SLEEP=.5
@@ -63,8 +73,53 @@ if [[ -z ${UPDATE} ]]; then
    exit
 fi
 
+if [[ "${BACKUP}" == "true" ]]; then
+	if [[ ${BACKUP_DIR} =~ .*backup* ]]
+	then
+		sleep ${SLEEP}
+		echo -e "${RED}Backing up selected files"
+		sleep ${SLEEP}
+		echo
+    	echo =======================================================================
+		echo
+		cd ${SOURCE_DIR}
+		if [[ "${BACKUP_FILEA}" == "" ]]; then
+			echo
+		else
+			sleep ${SLEEP}
+			cp ${BACKUP_FILEA} ${BACKUP_DIR}
+			echo Copying ${BACKUP_FILEA}
+			echo
+		fi
 
-echo -e "${RED}Start Update"
+		if [[ "${BACKUP_FILEB}" == "" ]]; then
+			echo
+		else
+			sleep ${SLEEP}
+			cp ${BACKUP_FILEB} ${BACKUP_DIR}
+			echo Copying ${BACKUP_FILEB}
+			echo
+		fi
+
+		if [[ "${BACKUP_FILEC}" == "" ]]; then
+			echo
+		else
+			sleep ${SLEEP}
+			cp ${BACKUP_FILEC} ${BACKUP_DIR}
+			echo Copying ${BACKUP_FILEC}
+			echo
+		fi
+		echo =======================================================================
+	fi
+else
+	sleep ${SLEEP}
+	echo -e "${RED}Back up mode disabled"
+	echo
+    echo =======================================================================
+fi
+echo 
+
+echo Start Update
 
 echo
 sleep ${SLEEP}
@@ -119,6 +174,46 @@ echo Copy Complete!
 echo
 
 echo -e "======================================================================="
+
+if [[ "${BACKUP}" == "true" ]]; then
+	if [[ ${BACKUP_DIR} =~ .*backup* ]]
+	then
+		sleep ${SLEEP}
+		echo -e "${RED}Restoring files"
+		cd ${BACKUP_DIR}
+			if [[ "${BACKUP_FILEA}" == "" ]]; then
+			echo
+		else
+			sleep ${SLEEP}
+			cd ${BACKUP_DIR}
+			cp ${BACKUP_FILEA} ${SOURCE_DIR}
+			echo Restoring ${BACKUP_FILEA}
+			echo
+		fi
+
+		if [[ "${BACKUP_FILEB}" == "" ]]; then
+			echo
+		else
+			sleep ${SLEEP}
+			cd ${BACKUP_DIR}
+			cp ${BACKUP_FILEB} ${SOURCE_DIR}
+			echo Restoring ${BACKUP_FILEB}
+			echo
+		fi
+
+		if [[ "${BACKUP_FILEC}" == "" ]]; then
+			echo
+		else
+			sleep ${SLEEP}
+			cd ${BACKUP_DIR}
+			cp ${BACKUP_FILEC} ${SOURCE_DIR}
+			echo Restoring ${BACKUP_FILEC}
+			echo
+		fi
+	fi
+	echo -e "======================================================================="
+fi
+
 
 echo
 sleep 2
